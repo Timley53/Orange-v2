@@ -55,11 +55,63 @@ export interface PageDataCategoryType{
 
 }
 
+// budget types
+
 export interface CategoryBudget {
     id: string,
     title: string,
     amount: number
 }
+
+
+
+// targetedSavingType
+export interface TargetedPlans{
+    id: string,
+    target: number,
+    title: string,
+    data: SingularEntryTargetedSavingsType[],
+    note?: string
+}
+
+export interface SingularEntryTargetedSavingsType{
+    id: string,
+    title: string,
+    date: string, 
+    amount: number
+}
+
+
+//free savings 
+
+export interface FreeSavingsPlan{
+    id: string,
+    title: string,
+    note?: string,
+    data: []
+
+}
+
+export interface SingularFreeSavingsType{
+    id: string,
+    title: string,
+    amount: number,
+    date: string,
+}
+
+
+// savings type structures
+
+export interface SavingsPage{
+    id: string,
+    title: string,
+    targetedSavingPlan: TargetedPlans[],
+    freeSavings: SingularFreeSavingsType[]
+
+}
+
+
+
 
 // ===each page data object(in collection doc)
 export interface PageDataType {
