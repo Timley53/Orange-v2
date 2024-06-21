@@ -1,20 +1,24 @@
-import { CatTotalType } from '@/app/Utils/helperFxn'
 import React from 'react'
 import { GetIcon } from './ExpenseArticle'
 import Link from 'next/link'
 import { FaAngleRight } from 'react-icons/fa6'
+import { ExpensePageDataCategoryType } from '@/app/Interface'
+import { Cal_Cat_total } from '@/app/Utils/helperFxn'
 
-function HomeCategoryArticle({title, total}:CatTotalType) {
+function HomeCategoryArticle({budget, categoryData, categoryTitle,id}: ExpensePageDataCategoryType) {
+  
   return (
-    <article className='flex w-full p-2 border-b-2  items-center'>
+    <article key={id} className='flex w-full p-2 items-center my-1'>
         <span className='text-xl mr-2 bg-rose-400 p-3 rounded-full '>
-           <GetIcon type={title}/>
+           <GetIcon type={categoryTitle}/>
         </span>
 
         <div className="ml-2 flex my-1 flex-col w-full">
-            <span>{title[0].toUpperCase() + title.slice(1)}</span>
-        <small>{total}</small>
+            <span>{categoryTitle}</span>
         </div>
+
+        <small className='self-end my-auto'>${Cal_Cat_total(categoryData)}/${budget}</small>
+
     </article>
   )
 }

@@ -1,4 +1,4 @@
-import { ExpenseDeleModalType } from '@/app/Interface'
+import { DeleteModalDetailsType, ExpenseDeleModalType } from '@/app/Interface'
 import { ExpenseContext } from '@/app/Utils/Context'
 import React, { useContext, useState } from 'react'
 import GeneralLoading from '../GeneralLoading'
@@ -9,8 +9,8 @@ import OnSettled from './OnSettled'
 interface Props {
     showDelete:boolean,
     setShowDelete: React.Dispatch<React.SetStateAction<boolean>>,
-    deleteModalDetails:string
-    setDeleteDetails  :React.Dispatch<React.SetStateAction<string>> ,
+    deleteModalDetails:DeleteModalDetailsType 
+    setDeleteDetails  :React.Dispatch<React.SetStateAction<DeleteModalDetailsType>> ,
     
 }
 
@@ -18,6 +18,18 @@ interface Props {
 
 function DeleteModal({setDeleteDetails,setShowDelete,showDelete}: Props) {
     const {Mutating, MutateIsError,isSuccess, deleteModalDetails,mutateAsync,refetch, reset, settled } = useContext(ExpenseContext)
+
+
+   async function deleteFxn(){
+      if(deleteModalDetails.type === "deleteExp"){
+        await mutateAsync(deleteModalDetails.id , {
+
+        })
+
+      } else if(deleteModalDetails.type === "deleteCat"){
+        
+      }
+    }
 
 
   return (
@@ -31,15 +43,16 @@ function DeleteModal({setDeleteDetails,setShowDelete,showDelete}: Props) {
     <div className="flex justify-between p-2 w-full my-6">
       <button
        onClick={()=> { 
-        setDeleteDetails("")
+        setDeleteDetails({
+          id: "",
+          type: ""
+        })
         setShowDelete(false)
       }}
       className='p-3 bg-emerald-600 text-white rounded-2xl px-6'>No</button>
-      <button className='p-3  px-6 rounded-2xl text-white bg-rose-500' onClick={ async ()=> { 
-        
-        await mutateAsync(deleteModalDetails , {
-
-      })}}>Yes</button>
+      <button className='p-3  px-6 rounded-2xl text-white bg-rose-500' onClick={  ()=> { 
+        deleteFxn()
+     }}>Yes</button>
     </div>
     </div>
   }

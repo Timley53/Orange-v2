@@ -1,7 +1,7 @@
 import generateUniqueId from "generate-unique-id"
-import { CategoryBudget, PageDataCategoryType, PageDataType, SingleEntryDataType, expenseDefaultCat,  incomeDefaultCat } from "../Interface"
+import { ExpensePageDataCategoryType, ExpensePageDataType, ExpenseSingleEntryDataType, IncomePage, SavingsPage, expenseDefaultCat,  incomeDefaultCat } from "../Interface"
 
-import {isAfter, isEqual} from "date-fns"
+import {compareAsc, isAfter, isEqual, isSameMonth} from "date-fns"
 import JSXStyle from "styled-jsx/style"
 import { IconType } from "react-icons"
 import { GiClothes } from "react-icons/gi"
@@ -16,17 +16,18 @@ import React from "react"
  * @returns --- the array of Default categories created using the categoryListArr
  */
 
-export const generatePageDefaultCatArray: (categoryListArr:string[])=> PageDataCategoryType[] = (categoryListArr )=> {
+export const expense_Page_Category_default_dataArr: (categoryListArr:string[])=> ExpensePageDataCategoryType[] = (categoryListArr )=> {
 
-    const newArr:PageDataCategoryType[] = categoryListArr.map(cat => {
-        const newDefault: PageDataCategoryType = {
+    const newArr:ExpensePageDataCategoryType[] = categoryListArr.map(cat => {
+        const newDefault: ExpensePageDataCategoryType = {
           id:`${cat}/${generateUniqueId({
              length: 6,
              useLetters: true,
              useNumbers:true,
          })}`,
              categoryTitle: cat,
-             categoryData: []      
+             categoryData: []  ,
+             budget: 0
  }
  
  return newDefault
@@ -36,7 +37,16 @@ export const generatePageDefaultCatArray: (categoryListArr:string[])=> PageDataC
     return newArr
 }
 
+// =====================================
 
+// income pageCategory default
+
+// export const income_page_Default_data_array:  (categoryListArr:string[]) => 
+
+
+
+
+// ==================================
 
 
 /**
@@ -44,41 +54,63 @@ export const generatePageDefaultCatArray: (categoryListArr:string[])=> PageDataC
  * @param page --- the page title
  * @returns ---the page object data to be stored in the document of the page collection
  */
-export const generatePageDataStuctureDefault: (page: string)=> PageDataType = (page: string) => {
+export const generatePageDataStuctureDefault: (page: string)=> ExpensePageDataType | IncomePage | SavingsPage | undefined = (page: string) => {
 
 
 
+if(page === "expense"){
 
-    const PageDataStucture: PageDataType  = {
+    const PageDataStucture: ExpensePageDataType  = {
         id:`${page}/${generateUniqueId({
             length: 6,
             useLetters: true,
             useNumbers:true,
         })}`,
         title: page,
-        categoryList: page === "expense" ?  ["clothing","utilities", "rent", "health", "internet", "gifts", "food", "transport", "maintenance", "taxes", "others"] : page === "income" ?  ["salary", "freelance"] : [],
-        dataByCategory: page === "expense" ? generatePageDefaultCatArray( ["clothing","utilities", "rent", "health", "internet", "gifts", "food", "transport", "maintenance", "taxes", "others"]) : page === "income" ? generatePageDefaultCatArray( ["salary", "freelance"]) : [],
-        budget: [
-            {
-                id: `rent/${generateUniqueId({
-                    length: 6,
-                    useLetters: true,
-                    useNumbers:true,
-                })}`,
-                title: 'rent',
-                amount: 2000
-            }
-        ]
+        categoryList: ["clothing","utilities", "rent", "health", "internet", "gifts", "food", "transport", "maintenance", "taxes", "others"],
+        dataByCategory:  expense_Page_Category_default_dataArr(["clothing","utilities", "rent", "health", "internet", "gifts", "food", "transport", "maintenance", "taxes", "others"]),
+       
     }
 
-
     return PageDataStucture
+
+
+} else if(page === "income"){
+    const IncomePageData: IncomePage  = {
+        id:`${page}/${generateUniqueId({
+            length: 6,
+            useLetters: true,
+            useNumbers:true,
+        })}`,
+        title: page,
+        other: [],
+        salary: 0
+
+    }
+
+    return IncomePageData
+}else if(page === "savings"){
+    const SavingsPageData: SavingsPage = {
+        id: `${page}/${generateUniqueId({
+            length: 6,
+            useLetters: true,
+            useNumbers:true,
+        })}`,
+        title: page,
+        freeSavings: [],
+        targetedSavingPlan: [],
+    }
+
+    return SavingsPageData
+}
+
 }
 
 // export const expenseDefaultCat = ["clothing","utilities", "rent", "health", "internet", "gifts", "food", "transport", "maintenance", "taxes", "others"]
 
 // export const incomeDefaultCat = ["salary", "freelance"]
 
+/*
 export interface CatTotalType {
     title: string,
     total: number
@@ -88,7 +120,8 @@ const currentYear = new Date().toDateString()
 // const testDate = new Date(currentYear + "").toDateString()
 // console.log(currentYear);
 // console.log(testDate);
-
+*/
+/*
 export const calculateCategoryTotal:(catArr :PageDataCategoryType[])=> CatTotalType[] = (catArr :PageDataCategoryType[]) =>{
 
     const allCatTotal:CatTotalType[] = catArr.map((catData)=> {
@@ -101,7 +134,10 @@ export const calculateCategoryTotal:(catArr :PageDataCategoryType[])=> CatTotalT
         return allCatTotal
 }
 
+*/
 
+
+/*
 export function showMaxCat(catArr: CatTotalType[]){
 
     const maxCat = catArr.sort((a, b) => b.total - a.total);
@@ -163,7 +199,7 @@ export const createSingleEntryData: createSingleDataEntry = (type, category, amo
     
 }
 
-
+*/
 /**
  * 
  * @param category a string value of the category's data we want to display, the initial value is default which is just all the expenses sorted by date 
@@ -172,6 +208,8 @@ export const createSingleEntryData: createSingleDataEntry = (type, category, amo
 
  */
 
+
+/*
 export const getCurrentCategoryData = (category: string, allCategory:PageDataCategoryType[] ) => {
 
     if(category === "default"){
@@ -256,3 +294,63 @@ export const TotalCategory:TotalCategory = (exSingleEntry)=> {
 
 
 // }
+
+*/
+
+
+
+type Cal_Cat_total_Type = (catPerArr: ExpenseSingleEntryDataType[]) => number;
+
+export const Cal_Cat_total: Cal_Cat_total_Type = (catPerArr) => {
+
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+
+    return catPerArr.reduce((acc, cur) => acc + cur.amount, 0)
+};
+
+
+type Total_Balance_Calc_Type = (catArr:ExpensePageDataCategoryType[], income:number ) => number;
+
+
+
+
+export const calculate_Total_balance: Total_Balance_Calc_Type = (catArr, income) =>{
+
+    const TotalCategoryTotal = catArr.map((cat)=> Cal_Cat_total(cat.categoryData)).reduce((acc, cur) => acc + cur,0)
+
+    return income - TotalCategoryTotal 
+};
+
+   // filterAllExpByDate===================
+   export type FilterAllExpByDateType  = (ExpArr: ExpenseSingleEntryDataType[]) => ExpenseSingleEntryDataType[] | []
+
+   export const filterAllExpByDate:FilterAllExpByDateType  = (ExpArr) =>{
+
+           const thisYear = new Date().getFullYear()
+           // ExpArr
+           const filterToThisYear = ExpArr.filter((exp) => isAfter(new Date(exp.date), new Date(`01/01/${thisYear}`)) )
+
+           const sortToLatest = filterToThisYear.sort((a, b) => compareAsc(new Date(a.date), new Date(b.date)))
+           // could comapreDesc
+
+           return sortToLatest
+           
+   }
+
+
+//    ==filter to current month
+export type FilterAllExpByMonthType  = (ExpArr: ExpenseSingleEntryDataType[] | []) => ExpenseSingleEntryDataType[] | []
+   
+export const filterAllExpByMonth:FilterAllExpByMonthType = (ExpArr)=> {
+    const thisYear = new Date().getFullYear()
+    const filterToThisYear = ExpArr.filter((exp) => isAfter(new Date(exp.date), new Date(`01/01/${thisYear}`)) )
+
+    const filterToCurrentMonth = filterToThisYear.filter(exp => isSameMonth(new Date(exp.date), new Date() ))
+
+    return filterToCurrentMonth
+
+}
+
+   // /==================
+

@@ -1,23 +1,38 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import ExpenseArticle from '../Components/Articles/ExpenseArticle'
-import { PageDataType } from '../Interface'
+import {  } from '../Interface'
 import { DocumentData } from 'firebase/firestore'
+import { HomePageContext } from '../Utils/Context'
+import { filterAllExpByDate } from '../Utils/helperFxn'
 
 
-interface DataProps {expense: PageDataType | DocumentData} 
+// interface DataProps {expense: PageDataType | DocumentData} 
 
 
-function LastExpense({expense}: DataProps) {
+function LastExpense({}) {
+
+  const {expensedata} = useContext(HomePageContext)
+
+  // expensedata
+
+
+
   return (
-    <div className='md:w-[30%] min-w-[250px] border-2 min-h-[320px] rounded-md md:mx-3 sm:w-full sm:mx-auto sm:my-3'>
-        <header className='flex p-2 bg-slate-200 justify-between'>
+    <div className='md:w-[30%]  border-2 h-[500px] rounded-md md:mx-1 sm:w-[95%] sm:mx-auto  p-2 sm:my-2 md:my-0'>
+        <header className='flex p-2 border-b-2 justify-between'>
             <span className='text-sm'>Last 5 expense</span>
             <Link href={"expense"} className='text-sm hover:text-orange-600 transition-all'>Show all</Link>
         </header>
           {
-            // expense.dataByCategory
-              // <ExpenseArticle/>
+                  expensedata.dataByCategory.map(expCat => expCat.categoryData).flat().length < 1 && <div className="min-h-[200px] w-full flex items-center justify-center">
+                    No Expenses
+                  </div>
+
+          }
+           {
+              expensedata.dataByCategory.map(expCat => expCat.categoryData).flat().length > 0 &&  
+              expensedata.dataByCategory.map(expCat => expCat.categoryData).flat().slice(0, 5).map(exp => <ExpenseArticle key={exp.id} {...exp}/>)
           
           }
     </div>

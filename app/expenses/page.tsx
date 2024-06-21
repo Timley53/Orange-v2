@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, database } from '../Utils/firebase'
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
-import { ExpenseDeleModalType, FilterDateType, MyGlobalContextType, PageDataType } from '../Interface'
+import { DeleteModalDetailsType, ExpenseDeleModalType, ExpensePageDataType, FilterDateType, MyGlobalContextType } from '../Interface'
 import { ExpenseContext, GlobalContext } from '../Utils/Context'
 import { useMutation, useMutationState, useQuery } from '@tanstack/react-query'
 import GeneralLoading from '../Components/GeneralLoading'
@@ -19,9 +19,12 @@ import ExpDoughnutChart from './ExpDoughnutChart'
 import ExpHistory from './ExpHistory'
 import FilterModal from '../Components/Modals/FilterModal'
 import DeleteModal from '../Components/Modals/DeleteModal'
-import { calculateCategoryTotal, getCurrentCategoryData } from '../Utils/helperFxn'
+import {  } from '../Utils/helperFxn'
 import useHistoryState from '../Hooks'
 import { dummyCategoryData } from '../Utils/junk'
+import ExpBudgets from './ExpBudgets'
+import ListAllExpenseCategory from './ListAllExpenseCategory'
+import { ExpensePageDataTypeDummyObj } from '../Utils/dummy'
 
 
 
@@ -61,19 +64,15 @@ const [isSuccess, setIsSuccess] = useState(false)
 
   const {isPending:Mutating, mutateAsync,error:MutateError, reset,  } = useMutation({mutationFn: deleteExpense, onSettled: OnDeleteSettled, onSuccess:OnDeleteSuccess, onError: OnDeleteError })
 
-  // const mutation = useMutation({mutationFn: deleteExpense})
-  // mutation.reset()
-
-  
-
-  // filter hooks
-  
-  // mutate("", {})
+ 
 
 
   //===========Delete context hooks
   const [showDelete, setShowDelete] = useState<boolean>(false)
-  const [deleteModalDetails, setDeleteDetails] = useState<string>("")
+  const [deleteModalDetails, setDeleteDetails] = useState<DeleteModalDetailsType >({
+    id: "",
+    type: ""
+  })
 
   
   // ===============
@@ -97,7 +96,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
       expData: expenseDoc.data() ,
     
     } as {
-      expData: PageDataType
+      expData: ExpensePageDataType
     }
     
 
@@ -115,7 +114,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
 // =====================
 
 // delete fxn====================
-      async function deleteExpense( id:string): Promise<PageDataType | undefined>{
+      async function deleteExpense( id:string): Promise<ExpensePageDataType | undefined>{
 
       const catTitle = id.split("/")[1] 
 
@@ -125,7 +124,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
       if(data){
 
         
-      const newData: PageDataType =   {
+      const newData: ExpensePageDataType =   {
         ...data.expData,
 
         dataByCategory: data.expData.dataByCategory.map((category) => {
@@ -146,7 +145,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
       const docRef = doc(database,"users", user ? user.uid : userId)
       const expSubColRef = collection(docRef, "expense") 
       const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
-      const deleteDoc = setDoc(expSubColDocRef,newData)
+      const deleteDoc = await setDoc(expSubColDocRef,newData)
     
 
       // deleteDoc
@@ -154,8 +153,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
   // get the updated doc
       const expenseDoc = await getDoc(expSubColDocRef)  
       
-      return expenseDoc.data() as PageDataType 
-      // return expenseDoc.exists
+      return expenseDoc.data() as ExpensePageDataType 
 
     
     } else{
@@ -182,10 +180,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
 
 
        ///Props Obj ====================
-       const sumTotalsProps = {
-        showTotal, setShowTotal,
-        data: data ?  calculateCategoryTotal(data.expData.dataByCategory): []
-      }
+      
 
     if(authLoading) return (
       <GeneralLoading/>
@@ -199,8 +194,8 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
             mutateAsync,
             MutateError,
             isSuccess, MutateIsError, refetch, reset,settled, setSettled,
-setMutateIsError,
-setIsSuccess ,
+setMutateIsError, data: data ? data.expData : ExpensePageDataTypeDummyObj,
+setIsSuccess ,currentCategory, setCurCat,  CategoryDatas: data ? data.expData.dataByCategory : []
             
             }}>
 
@@ -208,7 +203,7 @@ setIsSuccess ,
           <div className='expense w-full md:pl-4 flex flex-col h-screen overflow-y-scroll'>
   
 
-     <Header categoryList = {data?.expData.categoryList ? data.expData.categoryList : noDataCategoryList }  currentCategory={currentCategory}  setCurCat={setCurCat} {...sumTotalsProps} />
+     <Header categoryList = {data?.expData.categoryList ? data.expData.categoryList : noDataCategoryList }   showTotal={showTotal} setShowTotal={setShowTotal} />
 
      { showDelete && <DeleteModal showDelete={showDelete}
 setShowDelete = {setShowDelete}
@@ -221,20 +216,18 @@ setDeleteDetails ={setDeleteDetails} />
 
 <div className="history_chart min-h-[64vh] flex md:flex-row md:flex-wrap sm:flex-col   items-center justify-between rounded-lg shadow-2xl shadow-slate-500 my-2 p-2 ">
 
-<ExpHistory expenseArr ={data ? getCurrentCategoryData(currentCategory, data.expData.dataByCategory) : noDataExpHistory } />
+<ExpHistory  />
 
 <ExpDoughnutChart category={data ? data.expData.dataByCategory : []}/>
-
-
 </div>
-
-
+<ExpBudgets/>
+<ListAllExpenseCategory/>
 
 
   </div>
-
-  <SumTotals {...sumTotalsProps}/>
+  <SumTotals showTotal={showTotal} setShowTotal={setShowTotal} />
 </section>
+
       
     </div>
     </ExpenseContext.Provider>

@@ -1,5 +1,8 @@
-import { SingleEntryDataType } from '@/app/Interface'
+import { ExpenseSingleEntryDataType } from '@/app/Interface'
 import { ExpenseContext } from '@/app/Utils/Context'
+import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/router'
+// import { useRouter } from 'next/navigation'
 import React, { useContext } from 'react'
 import { BiBuildingHouse } from 'react-icons/bi'
 import { BsFillMotherboardFill } from 'react-icons/bs'
@@ -82,13 +85,14 @@ export function GetIcon({type}: {type: string}){
 
 
 
-function ExpenseArticle({amount,date,id,note}: SingleEntryDataType) {
+function ExpenseArticle({amount,date,id,note}: ExpenseSingleEntryDataType) {
 
   const {setShowDelete, setDeleteDetails,} = useContext(ExpenseContext)
+  const pathName = usePathname()
 
     
-  console.log(id);
   // console.log(id);
+  // console.log(pathName.split("/"));
   
   return (
     <article className='justify-between shadow-xl w-full shadow-slate-300 border-2 border-slate-200 border-t-slate-100 p-2 flex min-h-14 items-center my-2'>
@@ -113,12 +117,22 @@ function ExpenseArticle({amount,date,id,note}: SingleEntryDataType) {
          {amount}
           </span>
 
-          <button className='mx-3 text-lg p-4' onClick={()=> {
-            setShowDelete(true)
-             setDeleteDetails(id)
-          }}>
+          {
+
+    pathName.split("/")[1] !== "dashboard" &&
+            
+            <button className='mx-3 text-lg p-4' onClick={()=> {
+              setShowDelete(true)
+              setDeleteDetails({
+                id: id,
+                type: "deleteExp"
+              })
+            }}>
+
+
         <MdOutlineDelete /> 
                </button>
+          }
           </div>
 
         

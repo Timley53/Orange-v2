@@ -109,6 +109,7 @@ const onError = (err: Error) => {
       
             promises.push(createCollection("expense"));
             promises.push(createCollection("income"));
+            promises.push(createCollection("savings"));
             // promises.push(createCollection("collection3"));
             // promises.push(createCollection("collection4"));
       

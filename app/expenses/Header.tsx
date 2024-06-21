@@ -4,22 +4,22 @@ import { MdAdd, MdMenu } from 'react-icons/md'
 import MobileAddnew from './MobileAddnew'
 import { FaCalculator, FaFilter } from 'react-icons/fa'
 import { BsMenuButtonWideFill } from 'react-icons/bs'
-import { GlobalContext } from '../Utils/Context'
+import { ExpenseContext, GlobalContext } from '../Utils/Context'
 
 interface Props {
     categoryList: string[],
-    currentCategory: string,
-    setCurCat:React.Dispatch<React.SetStateAction<string>>,
+   
     showTotal: boolean,
     setShowTotal:React.Dispatch<React.SetStateAction<boolean>>
    
 }
 
-function Header({categoryList, currentCategory, setCurCat,showTotal, setShowTotal,}: Props) {
+function Header({categoryList,showTotal, setShowTotal,}: Props) {
     console.log(categoryList)
 
 
     const {setShowMenu, showMenu}  = useContext(GlobalContext)
+    const {currentCategory, setCurCat}  = useContext(ExpenseContext)
 
   return (
     <header className='flex pt-3 items-center px-3 z-[50]  border-2 sm:p-2 sm:px-1 sm:w-full  bg-white bg-opacity-25 backdrop-blur-md sticky top-0 justify-between '>

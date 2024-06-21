@@ -1,10 +1,10 @@
 import { PieChart } from '@mui/x-charts/PieChart'
 import React from 'react'
-import { PageDataCategoryType } from '../Interface'
-import { TotalCategory } from '../Utils/helperFxn'
+import { ExpensePageDataCategoryType } from '../Interface'
+import { Cal_Cat_total } from '../Utils/helperFxn'
 
 interface Props {
-  category: PageDataCategoryType[] | [],
+  category: ExpensePageDataCategoryType[] | [],
 }
 
 const arr = [
@@ -25,7 +25,7 @@ function ExpDoughnutChart({category}:Props) {
       return {
         id: exp.id,
         label: exp.categoryTitle,
-        value: TotalCategory(exp.categoryData)
+        value: Cal_Cat_total(exp.categoryData)
       }
     } ) : arr;
 

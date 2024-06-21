@@ -1,27 +1,31 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ImCross } from 'react-icons/im'
 import CategorySumArticle from '../Components/Articles/CategorySumArticle'
 import Pagination from '../Components/Pagination'
-import { CatTotalType } from '../Utils/helperFxn'
+import { Cal_Cat_total } from '../Utils/helperFxn'
+import { ExpenseContextType } from '../Interface'
+import { ExpenseContext } from '../Utils/Context'
 
 const newArr = new Array(16).fill(Math.random())
 
 interface Props {
     showTotal: boolean
     ,setShowTotal:React.Dispatch<React.SetStateAction<boolean>>,
-    data: CatTotalType[] | []
 
 
 }
 
-function SumTotals({showTotal, setShowTotal, data}: Props) {
+function SumTotals({showTotal, setShowTotal}: Props) {
 
 
     const [currentPage, setCurrentPage] = useState(1)
 
+    const {CategoryDatas} = useContext<ExpenseContextType>(ExpenseContext)
+
+    // CategoryDatas
         
     const dataPerPage = 7;
-    const pages = Math.ceil(data ? data.length/ dataPerPage : 0 )
+    const pages = Math.ceil(CategoryDatas ? CategoryDatas.length/ dataPerPage : 0 )
   
     const start = (currentPage - 1) * dataPerPage
     const end = currentPage * dataPerPage
@@ -43,7 +47,7 @@ function SumTotals({showTotal, setShowTotal, data}: Props) {
         <div className=" flex flex-col h-[70%] min-h-[460px] w-full ">
 
             {
-                data && data.slice(start, end).map((catTotal) => <CategorySumArticle key={catTotal.total * (Math.random() + 1)} {...catTotal}/> )
+                CategoryDatas && CategoryDatas.slice(start, end).map((category) => <CategorySumArticle key={category.id } {...category}/> )
             }
 
         </div>
@@ -59,7 +63,7 @@ function SumTotals({showTotal, setShowTotal, data}: Props) {
 
     <div className="total  pt-4 text-sm flex justify-between p-1">
 <span>Total</span>
-<span>{data.reduce((acc, cur)=> acc + cur.total, 0)}</span>
+<span>{CategoryDatas.reduce((acc, cur)=> acc + Cal_Cat_total(cur.categoryData), 0)}</span>
     </div>
 
     <div className="w-full  items-center justify-center p-2 md:hidden sm:flex ">

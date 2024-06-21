@@ -1,35 +1,42 @@
 "use client"
 
 
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useContext, useState } from 'react'
 import ExpenseArticle from '../Components/Articles/ExpenseArticle'
 import Pagination from '../Components/Pagination';
-import { PageDataCategoryType, SingleEntryDataType } from '../Interface';
+import { ExpenseContextType } from '../Interface';
 import useHistoryState from '../Hooks';
 import { FaFilter, FaLongArrowAltRight } from 'react-icons/fa';
 import { isAfter, isEqual } from 'date-fns';
-import { sortSingleEntryDataByDate } from '../Utils/helperFxn';
+import {  } from '../Utils/helperFxn';
 import { collection } from 'firebase/firestore';
 import NoDataRecord from '../Components/NoDataRecord';
+import { ExpenseContext } from '../Utils/Context';
 
 const expenseArrDum = new Array(40).fill(Math.random())
 
 interface Props{
-  expenseArr: SingleEntryDataType[] | undefined,
+  // expenseArr: SingleEntryDataType[] | undefined,
   
 }
 
 // const 
 
-function ExpHistory({expenseArr} :Props ) {
+function ExpHistory({} :Props ) {
     const [currentPage, setCurrentPage] = useState(1)
     const [showFilter, setShowFilter] = useState(false)
     const [from, setFrom] = useState("")
     const [to, setTo] = useState("")
-    const[historyArray, setHistory] = useState(expenseArr)
+    // const[historyArray, setHistory] = useState(expenseArr) 
+     const {CategoryDatas, currentCategory} = useContext<ExpenseContextType>(ExpenseContext)
+
+  const chooseCurrentCategory =  currentCategory === "default" ? CategoryDatas.map(expCat => expCat.categoryData).flat() : CategoryDatas.filter(expCat => expCat.categoryTitle === currentCategory).map(expCat => expCat.categoryData ).flat()      
+
+  //filter the data to current date first and oldest date last
+
 
   const dataPerPage = 6;
-  const pages = Math.ceil(expenseArr ? expenseArr.length/ dataPerPage : 0 )
+  const pages = Math.ceil(CategoryDatas ? chooseCurrentCategory.length / dataPerPage : 0  )
 
   const start = (currentPage - 1) * dataPerPage
   const end = currentPage * dataPerPage
@@ -38,8 +45,6 @@ console.log(to, from)
 console.log(isEqual(to, from))
   const submitDateForm = (e:FormEvent)=> {
     e.preventDefault()
-
-      setHistory(sortSingleEntryDataByDate(to, from, expenseArr ? expenseArr : [] ))
 
   }
 
@@ -62,18 +67,18 @@ console.log(isEqual(to, from))
           </div>
     <div className="history-article min-h-[60vh]  border-red-300">
    {
-    expenseArr && expenseArr.length > 0 &&
-    expenseArr.slice(start, end).map((exp)=> <ExpenseArticle {...exp} key={exp.id }
+    CategoryDatas && chooseCurrentCategory.length > 0 &&
+    chooseCurrentCategory.slice(start, end).map((exp)=> <ExpenseArticle {...exp} key={exp.id }
     />) 
    }
 
 
    {
-    expenseArr && expenseArr.length < 1 && <NoDataRecord/>
+    CategoryDatas && chooseCurrentCategory.length < 1 && <NoDataRecord/>
    }
     </div>
 
-    <div className="pagination h-full min-h-[8vh]  my-2">
+    <div className="pagination h-full min-h-[8vh] my-2">
 
         <Pagination currentPage={currentPage} pages={pages} setCurrentPage={setCurrentPage}/>
         

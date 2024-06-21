@@ -1,5 +1,6 @@
 import {  createContext } from "react";
-import { ExpenseContextType, MyGlobalContextType } from "../Interface";
+import { ExpenseContextType, HomePageContextType, MyGlobalContextType } from "../Interface";
+import { create } from "domain";
 
 export const GlobalContext = createContext<MyGlobalContextType>({
     showMenu: false,
@@ -12,10 +13,38 @@ export const GlobalContext = createContext<MyGlobalContextType>({
 })
 
 
+export const HomePageContext = createContext<HomePageContextType>({
+  expensedata: {
+    id: "",
+    title: "",
+        categoryList: [""],
+        dataByCategory: [],
+  },
+
+  incomeData: {
+    id: "",
+    title: "",
+    salary: 0,
+    other:  []
+  },
+  savingsData: {
+    id: " ",
+    title: " ",
+    targetedSavingPlan:  [], 
+    freeSavings:  []
+  },
+  userId: ""
+
+})
+
+
 export const ExpenseContext = createContext<ExpenseContextType>({
   showDelete:false,
   setShowDelete: ()=> {},
-  deleteModalDetails:"",
+  deleteModalDetails:{
+    id: "",
+    type: ""
+  },
   setDeleteDetails: ()=> {}, 
   Mutating: false,
   isSuccess: false,
@@ -27,7 +56,10 @@ reset: () => {},
 settled:false,
 setSettled: ()=> {},
 setIsSuccess: ()=>{},
-setMutateIsError: ()=>{}
+setMutateIsError: ()=>{},
+CategoryDatas: [],
+currentCategory: "default"
+, setCurCat: () => {}
 })
 
 
