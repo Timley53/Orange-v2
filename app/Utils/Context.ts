@@ -1,6 +1,7 @@
 import {  createContext } from "react";
 import { ExpenseContextType, HomePageContextType, MyGlobalContextType } from "../Interface";
 import { create } from "domain";
+import { ExpensePageDataTypeDummyObj } from "./dummy";
 
 export const GlobalContext = createContext<MyGlobalContextType>({
     showMenu: false,
@@ -59,7 +60,8 @@ setIsSuccess: ()=>{},
 setMutateIsError: ()=>{},
 CategoryDatas: [],
 currentCategory: "default"
-, setCurCat: () => {}
+, setCurCat: () => {},
+data: ExpensePageDataTypeDummyObj
 })
 
 
