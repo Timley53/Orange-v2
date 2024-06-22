@@ -13,7 +13,6 @@ import Header from './Header'
 import ExpenseRange from './ExpenseRange'
 import SumTotals from './SumTotals'
 import { FaCalculator } from 'react-icons/fa'
-// import { PieChart } from '@mui/material/';
 import { PieChart } from '@mui/x-charts/PieChart';
 import ExpDoughnutChart from './ExpDoughnutChart'
 import ExpHistory from './ExpHistory'
@@ -21,7 +20,6 @@ import FilterModal from '../Components/Modals/FilterModal'
 import DeleteModal from '../Components/Modals/DeleteModal'
 import {  } from '../Utils/helperFxn'
 import useHistoryState from '../Hooks'
-import { dummyCategoryData } from '../Utils/junk'
 import ExpBudgets from './ExpBudgets'
 import ListAllExpenseCategory from './ListAllExpenseCategory'
 import { ExpensePageDataTypeDummyObj } from '../Utils/dummy'
@@ -32,7 +30,7 @@ import { ExpensePageDataTypeDummyObj } from '../Utils/dummy'
 
 const noDataCategoryList: string[] = [""]
 
-const noDataExpHistory =[
+const noDataExpHistory = [
     {
       id:"",
       date: "",

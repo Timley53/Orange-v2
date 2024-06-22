@@ -15,7 +15,7 @@ export interface EditModalPropsType {
 function ExpBudgets() {
 
   const {CategoryDatas} = useContext(ExpenseContext)
-  const [user, authLoading, authError] = useAuthState(auth)
+  // const [user, authLoading, authError] = useAuthState(auth)
 
   // const [pending, setPending] = useState(false)
 

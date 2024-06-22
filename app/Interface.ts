@@ -44,7 +44,8 @@ setMutateIsError:React.Dispatch<React.SetStateAction<boolean>>,
 setIsSuccess:React.Dispatch<React.SetStateAction<boolean>>,
 CategoryDatas: ExpensePageDataCategoryType[] | []
 currentCategory: string
-, setCurCat: React.Dispatch<React.SetStateAction<string>>
+, setCurCat: React.Dispatch<React.SetStateAction<string>>,
+data: ExpensePageDataType 
 }
 
 export interface HomePageContextType {

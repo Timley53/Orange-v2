@@ -5,7 +5,7 @@
   //       router.replace("notloggedIn")
   //     }
 
-import { PageDataCategoryType } from "../Interface"
+// import { PageDataCategoryType } from "../Interface"
 
   //     if(user){
   //       uid = user.uid
@@ -58,11 +58,11 @@ export const dummyData = [
 ]
 
 
-export const dummyCategoryData:PageDataCategoryType = {
-    id: "dummyCat",
-    categoryTitle: "dummy",
-    categoryData:[
+// export const dummyCategoryData:PageDataCategoryType = {
+//     id: "dummyCat",
+//     categoryTitle: "dummy",
+//     categoryData:[
       
 
-    ]
-}
+//     ]
+// }
