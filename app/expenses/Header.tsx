@@ -7,19 +7,18 @@ import { BsMenuButtonWideFill } from 'react-icons/bs'
 import { ExpenseContext, GlobalContext } from '../Utils/Context'
 
 interface Props {
-    categoryList: string[],
+    // categoryList: string[],
    
     showTotal: boolean,
     setShowTotal:React.Dispatch<React.SetStateAction<boolean>>
    
 }
 
-function Header({categoryList,showTotal, setShowTotal,}: Props) {
-    console.log(categoryList)
-
+function Header({showTotal, setShowTotal,}: Props) {
+    
 
     const {setShowMenu, showMenu}  = useContext(GlobalContext)
-    const {currentCategory, setCurCat}  = useContext(ExpenseContext)
+    const {currentCategory, setCurCat, CategoryDatas, setCreateNewCat}  = useContext(ExpenseContext)
 
   return (
     <header className='flex pt-3 items-center px-3 z-[50]  border-2 sm:p-2 sm:px-1 sm:w-full  bg-white bg-opacity-25 backdrop-blur-md sticky top-0 justify-between '>
@@ -31,9 +30,9 @@ function Header({categoryList,showTotal, setShowTotal,}: Props) {
                  Categories
             </option>
             {
-                categoryList.map((cat, i)=> {
+                CategoryDatas.map((cat, i)=> {
                     return (
-                        <option key={i + cat} value={cat}>{cat[0]?.toUpperCase() + cat.slice(1)}</option>
+                        <option key={cat.id} value={cat.categoryTitle}>{cat.categoryTitle[0]?.toUpperCase() + cat.categoryTitle.slice(1)}</option>
                     )
                 })
             }
@@ -45,7 +44,7 @@ function Header({categoryList,showTotal, setShowTotal,}: Props) {
     
 <div className="creatnew_btn flex">
     
-<button className=' mx-2 p-2 px-3 bg-[#688E26] text-white rounded-full text-sm md:flex sm:hidden'>
+<button className=' mx-2 p-2 px-3 bg-[#688E26] text-white rounded-full text-sm md:flex sm:hidden' onClick={()=> setCreateNewCat(true)}>
             <span>Create category</span> 
 
             <MdAdd className='text-xl'/>

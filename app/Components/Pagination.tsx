@@ -54,9 +54,9 @@ function Pagination({currentPage, setCurrentPage, pages}: PaginationType) {
             {currentPage + 1} <span className='ml-2'> <FaArrowRight/> </span>
         </button>
 
-        <button className='p-1 px-4 rounded-full mx-4 text-sm hover:bg-orange-200 bg-mainOrange transition-all text-white flex  items-center' onClick={() => setCurrentPage(pages)}>
+      { pages > 3 && <button className='p-1 px-4 rounded-full mx-4 text-sm hover:bg-orange-200 bg-mainOrange transition-all text-white flex  items-center' onClick={() => setCurrentPage(pages)}>
           <ImForward3 /> 
-        </button>
+        </button>}
 
       
   </div>)
@@ -84,9 +84,9 @@ return  <div className="w-full min-h-[6vh] justify-center items-center flex mb-3
     return (
         <div className='w-full min-h-[6vh] justify-center items-center flex mb-3'>
 
-<button className='p-1 px-4 rounded-full mx-4 text-sm hover:bg-orange-200 bg-mainOrange transition-all text-white flex  items-center' onClick={() => setCurrentPage(1)}>
+{ pages > 3 && <button className='p-1 px-4 rounded-full mx-4 text-sm hover:bg-orange-200 bg-mainOrange transition-all text-white flex  items-center' onClick={() => setCurrentPage(1)}>
           <ImBackward2 /> 
-        </button>
+        </button>}
 
 
 <button className='p-1 px-4 rounded-full mx-4 text-sm hover:bg-orange-200 bg-mainOrange transition-all text-white flex  items-center' onClick={() => prev()}>

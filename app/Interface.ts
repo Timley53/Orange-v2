@@ -45,7 +45,9 @@ setIsSuccess:React.Dispatch<React.SetStateAction<boolean>>,
 CategoryDatas: ExpensePageDataCategoryType[] | []
 currentCategory: string
 , setCurCat: React.Dispatch<React.SetStateAction<string>>,
-data: ExpensePageDataType 
+data: ExpensePageDataType ,
+showCreateNewCategory:boolean
+, setCreateNewCat: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface HomePageContextType {

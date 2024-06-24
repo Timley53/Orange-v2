@@ -61,7 +61,9 @@ setMutateIsError: ()=>{},
 CategoryDatas: [],
 currentCategory: "default"
 , setCurCat: () => {},
-data: ExpensePageDataTypeDummyObj
+data: ExpensePageDataTypeDummyObj,
+showCreateNewCategory: false
+, setCreateNewCat: ()=> {}
 })
 
 

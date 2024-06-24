@@ -23,6 +23,7 @@ import useHistoryState from '../Hooks'
 import ExpBudgets from './ExpBudgets'
 import ListAllExpenseCategory from './ListAllExpenseCategory'
 import { ExpensePageDataTypeDummyObj } from '../Utils/dummy'
+import CreateNewCategory from './CreateNewCategory'
 
 
 
@@ -53,6 +54,14 @@ function page() {
   const [user, authLoading, authError] = useAuthState(auth)
   const [currentCategory, setCurCat] = useState<string>("default")
   const [showTotal, setShowTotal] = useState(false)
+
+  // categories budget tab
+  const [cat_budgetTab, setCatBud] = useState(true)
+
+  // create category
+
+  const [showCreateNewCategory, setCreateNewCat] = useState(false)
+
 
 
 // mutation hooks
@@ -189,7 +198,7 @@ const expSubColDocRef = doc(expSubColRef, "expenseDoc", )
         
         return (
           <ExpenseContext.Provider value={{deleteModalDetails,setDeleteDetails,setShowDelete,showDelete, Mutating,
-            mutateAsync,
+            mutateAsync,showCreateNewCategory, setCreateNewCat,
             MutateError,
             isSuccess, MutateIsError, refetch, reset,settled, setSettled,
 setMutateIsError, data: data ? data.expData : ExpensePageDataTypeDummyObj,
@@ -197,11 +206,14 @@ setIsSuccess ,currentCategory, setCurCat,  CategoryDatas: data ? data.expData.da
             
             }}>
 
+{
+  showCreateNewCategory && <CreateNewCategory/>
+}
 
           <div className='expense w-full md:pl-4 flex flex-col h-screen overflow-y-scroll'>
   
 
-     <Header categoryList = {data?.expData.categoryList ? data.expData.categoryList : noDataCategoryList }   showTotal={showTotal} setShowTotal={setShowTotal} />
+     <Header    showTotal={showTotal} setShowTotal={setShowTotal} />
 
      { showDelete && <DeleteModal showDelete={showDelete}
 setShowDelete = {setShowDelete}
@@ -218,8 +230,18 @@ setDeleteDetails ={setDeleteDetails} />
 
 <ExpDoughnutChart category={data ? data.expData.dataByCategory : []}/>
 </div>
-<ExpBudgets/>
-<ListAllExpenseCategory/>
+<div className="cat_budgetTab flex w-full p-1 my-2 mt-10 bg-slate-200 rounded-md">
+
+  <button className={`p-3 px-6 mx-2 bg-slate-100 rounded-sm ${cat_budgetTab ? "border-b-4 border-mainOrange" :""} `} onClick={()=> setCatBud(true)}>Categories</button>
+
+  <button className={`p-3 px-6 mx-2 bg-slate-100 rounded-sm ${!cat_budgetTab ? "border-b-4 border-mainOrange" :""} `} onClick={()=> setCatBud(false)}>Budgets</button>
+
+</div>
+
+{
+  cat_budgetTab && <ListAllExpenseCategory/> ||
+  <ExpBudgets/> 
+}
 
 
   </div>

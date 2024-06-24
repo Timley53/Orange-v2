@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../Utils/firebase'
 import EditBudgetModal from '../Components/Modals/EditBudgetModal'
 import { useMutation } from '@tanstack/react-query'
+import Pagination from '../Components/Pagination'
 
 export interface EditModalPropsType {
   budgetTitle:string,
@@ -28,6 +29,13 @@ function ExpBudgets() {
   })
   
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const dataPerPage = 7;
+  const pages = Math.ceil(CategoryDatas ? CategoryDatas.length/ dataPerPage : 0 )
+
+  const start = (currentPage - 1) * dataPerPage
+  const end = currentPage * dataPerPage
+
  
 
  
@@ -37,7 +45,7 @@ function ExpBudgets() {
 
 
   return (
-    <div className='flex flex-col w-full p-2 my-6 '>
+    <div className='flex flex-col w-full p-2 my-6 min-h-[400px]'>
       {
        showEditModal && <EditBudgetModal showEditModal ={showEditModal}
        setShowEditModal={setShowEditModal}
@@ -51,12 +59,18 @@ function ExpBudgets() {
 
         <div className="data flex flex-wrap w-full ">
         {
-            CategoryDatas.map((cat, i) => <BudgetArticles key={i} budget={cat.budget} id={cat.id} title={cat.categoryTitle}  setShowEditModal={setShowEditModal} setEditModalDetails={setEditModalDetails}/>)
+            CategoryDatas.slice(start, end).map((cat, i) => <BudgetArticles key={i} budget={cat.budget} id={cat.id} title={cat.categoryTitle}  setShowEditModal={setShowEditModal} setEditModalDetails={setEditModalDetails}/>)
 
             // create edit budget function
         }
             
         </div>
+
+        <div className="pagination h-full min-h-[6vh]  my-2">
+
+<Pagination currentPage={currentPage} pages={pages} setCurrentPage={setCurrentPage}/>
+
+</div>
 
     </div>
   )
