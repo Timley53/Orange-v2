@@ -222,7 +222,6 @@ setDeleteDetails ={setDeleteDetails} />
 }
 <section className='flex w-full relative '>
   <div className="history w-full md:mr-6">
-    <ExpenseRange/>
 
 <div className="history_chart min-h-[64vh] flex md:flex-row md:flex-wrap sm:flex-col   items-center justify-between rounded-lg shadow-2xl shadow-slate-500 my-2 p-2 ">
 
@@ -230,6 +229,8 @@ setDeleteDetails ={setDeleteDetails} />
 
 <ExpDoughnutChart category={data ? data.expData.dataByCategory : []}/>
 </div>
+<ExpenseRange/>
+
 <div className="cat_budgetTab flex w-full p-1 my-2 mt-10 bg-slate-200 rounded-md">
 
   <button className={`p-3 px-6 mx-2 bg-slate-100 rounded-sm ${cat_budgetTab ? "border-b-4 border-mainOrange" :""} `} onClick={()=> setCatBud(true)}>Categories</button>

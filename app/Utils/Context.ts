@@ -35,7 +35,6 @@ export const HomePageContext = createContext<HomePageContextType>({
     freeSavings:  []
   },
   userId: ""
-
 })
 
 

@@ -346,7 +346,7 @@ export const filterAllExpByMonth:FilterAllExpByMonthType = (ExpArr)=> {
     const thisYear = new Date().getFullYear()
     const filterToThisYear = ExpArr.filter((exp) => isAfter(new Date(exp.date), new Date(`01/01/${thisYear}`)) )
 
-    const filterToCurrentMonth = filterToThisYear.filter(exp => isSameMonth(new Date(exp.date), new Date() ))
+    const filterToCurrentMonth = filterToThisYear.filter(exp => isSameMonth(new Date(exp.date), new Date("06/22/2024") ))
 
     return filterToCurrentMonth
 
